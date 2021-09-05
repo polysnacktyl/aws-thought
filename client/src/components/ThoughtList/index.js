@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 // Renders the list of thoughts
 const ThoughtList = ({ thoughts, title }) => {
   if (!thoughts.length) {
+    console.log(thoughts);
     return <h3>No Thoughts Yet</h3>;
   }
   return (
@@ -26,7 +27,13 @@ const ThoughtList = ({ thoughts, title }) => {
                 {thought.thought}
               </p>
             }
-            
+            {thought.image &&
+              <p className='px-2'>
+                <img className='mt-3 ml-4 thought-image'
+                  src={thought.image} alt='s3 bucket response' />
+              </p>
+            }
+
           </div>
         ))}
     </div>

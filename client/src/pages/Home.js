@@ -6,6 +6,24 @@ const Home = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [thoughts, setThoughts] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('/api/users');
+        const jsonData = await res.json();
+        // sort by createdAt in descending order
+        const data = jsonData.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
+        setThoughts([...data]);
+        setIsLoaded(true);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+    // an empty dependency array means fetch 
+    // is only invoked once component mounts
+  }, []);
+
   return (
     <main>
       <div className="flex-row justify-space-between">
@@ -16,8 +34,8 @@ const Home = () => {
           {!isLoaded ? (
             <div>Loading...</div>
           ) : (
-              <ThoughtList thoughts={thoughts} setThoughts={setThoughts} title="Some Feed for Thought(s)..." />
-            )}
+            <ThoughtList thoughts={thoughts} setThoughts={setThoughts} title="Some Feed for Thought(s)..." />
+          )}
         </div>
       </div>
     </main>
