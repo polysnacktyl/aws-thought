@@ -11,6 +11,23 @@ const Profile = props => {
     thought: '',
   }]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`/api/users/${userParam}`);
+        const jsonData = await res.json();
+        // sort by createdAt in descending order
+        const data = jsonData.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
+        setThoughts([...data]);
+        setIsLoaded(true);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+    // username as dependency
+  }, [userParam]);
+
   return (
     <div>
       <div className="flex-row mb-3">
