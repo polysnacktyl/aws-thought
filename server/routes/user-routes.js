@@ -28,12 +28,13 @@ router.get('/users/:username', (req, res) => {
 
     const params = {
         TableName: table,
-        ProjectionExpression: '#th, #ca',
+        ProjectionExpression: '#un, #ca, #th, #img',
         KeyConditionExpression: '#un = :user',
         ExpressionAttributeNames: {
             '#un': 'username',
             '#ca': 'createdAt',
-            '#th': 'thought'
+            '#th': 'thought', 
+            '#img': 'image'
         },
         ExpressionAttributeValues: {
             ':user': req.params.username
@@ -58,17 +59,18 @@ router.post('/users', (req, res) => {
         Item: {
             'username': req.body.username,
             'createdAt': Date.now(),
-            'thought': req.body.thought
+            'thought': req.body.thought, 
+            'image': req.body.image
         }
     };
 
     dynamodb.put(params, (err, data) => {
         if (err) {
-            console.error('unable to add item. error: ', JSON.stringify(err, null, 2));
+            console.error('unable to add item. error:', JSON.stringify(err, null, 2));
             res.status(500).json(err);
         } else {
-            console.log('item added: ', JSON.stringify(data, null, 2));
-            res.status(200).json();
+            console.log('(70) item added:', JSON.stringify(data, null, 2));
+            res.json({ 'added': JSON.stringify(data, null, 2) });
         }
     });
 });
